@@ -1,0 +1,2 @@
+module KantaHelper
+end

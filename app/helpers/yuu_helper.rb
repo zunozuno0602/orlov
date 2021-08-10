@@ -1,0 +1,2 @@
+module YuuHelper
+end

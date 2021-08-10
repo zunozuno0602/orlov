@@ -1,0 +1,115 @@
+// Place all the styles related to the menbers controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+$mainColor: #f7f7f7;
+$backgroundImage: url(orlov8.JPG);
+$maxNumberOfElements: 8;
+
+* {
+  &,
+  &:before,
+  &:after {
+    box-sizing: border-box;
+    transition: all 200ms ease;
+  }
+}
+
+body {
+  background: $backgroundImage;
+  background-size: cover;
+  background-position: center;
+  font-family: 'Source Sans Pro', sans-serif;
+}
+
+
+@mixin generateClasses {
+  @for $lastElementNo from 1 through $maxNumberOfElements {
+    // find the correct width
+    &:last-child:nth-child(#{$lastElementNo}):before {
+      width: 100% / $lastElementNo;
+    }
+    
+    @for $hoveredElement from 1 through $lastElementNo {
+      // try to figure out which one is the one hovered
+      &:nth-child(#{$hoveredElement}):nth-last-child(#{$lastElementNo - $hoveredElement + 1}):focus ~ :last-child:before,
+      &:nth-child(#{$hoveredElement}):nth-last-child(#{$lastElementNo - $hoveredElement + 1}):last-child:focus:before{
+        left: ($hoveredElement - 1) * 100% / $lastElementNo;
+      }
+        
+      &:nth-child(#{$hoveredElement}):nth-last-child(#{$lastElementNo - $hoveredElement + 1}):last-child:before {
+        left: 0;
+      }
+    }
+  }
+}
+
+nav {
+  display: table;
+  table-layout: fixed;
+  margin: 40vh auto;
+  width: 80%;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+
+  a {
+    display: table-cell;    
+    width: 1%;
+    color: $mainColor;
+    text-transform: uppercase;
+    text-decoration: none;
+    letter-spacing: 1px;
+
+    @include generateClasses();
+    
+    span {
+      position: relative;
+      display: block;
+      padding: 1rem;
+      z-index: 10;
+    }
+    
+    &:last-child:before {
+      content: '';
+      display: block;
+      position: absolute;
+      bottom: 0;
+      background: #F9A926;
+      height: 4px;
+      z-index: -1;
+    }
+
+  }
+}
+.ripple {
+    position: relative;
+    overflow: hidden;
+}
+.ripple:after {
+    content: "";
+    background: transparentize($mainColor, 0.7);
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 450px;
+    height: 450px;
+    margin: auto;
+    opacity: 0;
+    transition: all 1s;
+    z-index: 1;
+}
+.ripple:active:after {
+    height: 10px;
+    width: 10px;
+    opacity: 1;
+    transition: 0s;
+}
+
+::selection {
+  background: rgba(255,255,255,0.3)
+}
